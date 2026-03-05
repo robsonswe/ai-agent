@@ -1,0 +1,92 @@
+name: response_quality_assessment
+
+cases:
+  - name: weather_helpful_response
+    inputs: "What's the weather in Paris?"
+    metadata:
+      category: response_quality
+    evaluators:
+      - SkillWasLoaded:
+          skill_name: weather
+      - ResponseNotEmpty:
+          min_length: 100
+      - ResponseContains:
+          text: paris
+
+  - name: code_review_constructive
+    inputs: "Review this function: def calculate(x, y): return x + y"
+    metadata:
+      category: response_quality
+    evaluators:
+      - SkillWasLoaded:
+          skill_name: code_review
+      - ResponseNotEmpty:
+          min_length: 200
+      - ResponseContains:
+          text: function
+
+  - name: weather_with_units
+    inputs: "What's the temperature in Berlin?"
+    metadata:
+      category: response_quality
+    evaluators:
+      - SkillWasLoaded:
+          skill_name: weather
+      - ToolWasCalled:
+          tool_name: http_get_tool
+      - ResponseContains:
+          text: berlin
+
+  - name: code_review_security_focus
+    inputs: "Check this for SQL injection: user_query = f'SELECT * FROM users WHERE id={id}'"
+    metadata:
+      category: response_quality
+    evaluators:
+      - SkillWasLoaded:
+          skill_name: code_review
+      - ResponseContains:
+          text: injection
+      - ResponseNotEmpty:
+          min_length: 150
+
+  # Research Assistant Quality
+  - name: research_comprehensive_response
+    inputs: "What does research say about sleep and memory?"
+    metadata:
+      category: response_quality
+    evaluators:
+      - SkillWasLoaded:
+          skill_name: research_assistant
+      - ResponseNotEmpty:
+          min_length: 100
+      - ResponseContains:
+          text: research
+
+  # Recipe Quality
+  - name: recipe_detailed_response
+    inputs: "How do I make spaghetti carbonara?"
+    metadata:
+      category: response_quality
+    evaluators:
+      - SkillWasLoaded:
+          skill_name: recipe_finder
+      - ResponseNotEmpty:
+          min_length: 100
+      - ResponseContains:
+          text: carbonara
+
+  # World Clock Quality
+  - name: world_clock_conversion_quality
+    inputs: "What's the time difference between New York and Tokyo?"
+    metadata:
+      category: response_quality
+    evaluators:
+      - SkillWasLoaded:
+          skill_name: world_clock
+      - ResponseNotEmpty:
+          min_length: 50
+      - ResponseContains:
+          text: hour
+
+evaluators:
+  - MaxDuration: 45.0
